@@ -20,17 +20,17 @@ function game() {
   resetButton.style.padding = "4px 10px";
   resetButton.style.marginBottom = "15px";
 
-  let boxId = 1;
+
   for (let row = 0; row < 9; row++) {
     for (let col = 0; col < 9; col++) {
       const newBox = document.createElement("div");
       // console.log(row, col);
-      newBox.setAttribute("id", `box-${boxId}`);
       newBox.setAttribute("data-row", row);
       newBox.setAttribute("data-col", col);
+      newBox.setAttribute("id", "notClicked");
       newBox.style.border = "1px solid";
       gameBoard.append(newBox);
-      boxId++;
+
     }
   }
 
@@ -40,18 +40,23 @@ function game() {
     const row = boxSelection.getAttribute("data-row");
     // console.log(row);
     const col = boxSelection.getAttribute("data-col");
-    const guess = board.makeHit(row, col);
+    // const guess = board.makeHit(row, col);
+    console.log(boxSelection.getAttribute("id"))
+
+    const guess = board.grid[row][col];
+
+    // const guess = board.makeHit(row, col);
 
     if (guess === null) {
       boxSelection.style.backgroundColor = "red";
-    } else if (typeof guess === "number") {
+      board.makeHit(row, col);
+    }
+    if (typeof guess === "number" && boxSelection.getAttribute("id") !== "hit"){
       boxSelection.style.backgroundColor = "green";
-      boxSelection.innerText = guess;
-      boxSelection.style.fontSize = "30px";
-      boxSelection.style.display = "flex";
-      boxSelection.style.justifyContent = "center";
-      boxSelection.style.alignItems = "center";
-
+      // TEST:
+      // boxSelection.innerText = guess;
+      boxSelection.setAttribute("id", "hit");
+      board.makeHit(row, col);
       // const currBox = document.getElementById(`box-${currBoxId}`);
     }
 
@@ -73,4 +78,3 @@ function game() {
   document.body.append(resetButton);
   document.body.append(gameBoard);
 }
-
